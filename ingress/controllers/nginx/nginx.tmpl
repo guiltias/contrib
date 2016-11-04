@@ -103,7 +103,7 @@ http {
     # Retain the default nginx handling of requests without a "Connection" header
     map $http_upgrade $connection_upgrade {
         default upgrade;
-        ''      close;
+        ''      "";
     }
 
     # trust http_x_forwarded_proto headers correctly indicate ssl offloading
@@ -179,6 +179,7 @@ http {
         {{- end }}
         {{ range $server := $upstream.Backends }}server {{ $server.Address }}:{{ $server.Port }} max_fails={{ $server.MaxFails }} fail_timeout={{ $server.FailTimeout }};
         {{ end }}
+        keepalive 64;
     }
     {{ end }}
 
